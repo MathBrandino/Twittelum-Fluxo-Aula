@@ -9,6 +9,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import br.com.caelum.twittelumfluxoaula.R;
+import br.com.caelum.twittelumfluxoaula.application.TwittelumApplication;
+import br.com.caelum.twittelumfluxoaula.bancodedados.dao.TweetDao;
 import br.com.caelum.twittelumfluxoaula.modelos.Tweet;
 
 public class TweetActivity extends AppCompatActivity {
@@ -38,7 +40,14 @@ public class TweetActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_salvar:
                 Tweet tweet = new Tweet(conteudo.getText().toString());
-                Toast.makeText(TweetActivity.this, tweet.getConteudo(), Toast.LENGTH_SHORT).show();
+
+                TweetDao tweetDao = TwittelumApplication.getInstance().getTweetDao();
+
+                tweetDao.salva(tweet);
+
+                Toast.makeText(TweetActivity.this, "Tweet salvo", Toast.LENGTH_SHORT).show();
+
+                conteudo.setText("");
         }
 
 
