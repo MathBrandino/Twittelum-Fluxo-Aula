@@ -15,14 +15,15 @@ import br.com.caelum.twittelumfluxoaula.modelos.Tweet;
 
 public class TweetActivity extends AppCompatActivity {
 
-    private EditText conteudo;
+    private EditText campoConteudo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tweet);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        conteudo = findViewById(R.id.conteudo);
+        campoConteudo = findViewById(R.id.conteudo);
 
     }
 
@@ -39,17 +40,27 @@ public class TweetActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.menu_salvar:
-                Tweet tweet = new Tweet(conteudo.getText().toString());
+                String conteudo = campoConteudo.getText().toString();
+                if (!conteudo.trim().isEmpty()) {
 
-                TweetDao tweetDao = TwittelumApplication.getInstance().getTweetDao();
+                    Tweet tweet = new Tweet(conteudo);
 
-                tweetDao.salva(tweet);
+                    TweetDao tweetDao = TwittelumApplication.getInstance().getTweetDao();
 
-                Toast.makeText(TweetActivity.this, "Tweet salvo", Toast.LENGTH_SHORT).show();
+                    tweetDao.salva(tweet);
 
-                conteudo.setText("");
+                    Toast.makeText(TweetActivity.this, "Tweet salvo", Toast.LENGTH_SHORT).show();
+
+                    finish();
+                } else {
+                    campoConteudo.setError("Campo precisa ter algo");
+                }
+
+                return true;
+
+            case android.R.id.home:
+                finish();
         }
-
 
         return true;
     }
