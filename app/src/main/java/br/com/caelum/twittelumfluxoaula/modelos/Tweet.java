@@ -45,4 +45,9 @@ public class Tweet {
     public Long getId() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return id + " - " + conteudo;
+    }
 }
