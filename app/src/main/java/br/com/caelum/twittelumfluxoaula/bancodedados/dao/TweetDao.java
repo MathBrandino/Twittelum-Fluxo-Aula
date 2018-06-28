@@ -1,6 +1,7 @@
 package br.com.caelum.twittelumfluxoaula.bancodedados.dao;
 
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
@@ -16,4 +17,7 @@ public interface TweetDao {
 
     @Query("select * from Tweet")
     List<Tweet> lista();
+
+    @Delete
+    void deleta(Tweet tweet);
 }

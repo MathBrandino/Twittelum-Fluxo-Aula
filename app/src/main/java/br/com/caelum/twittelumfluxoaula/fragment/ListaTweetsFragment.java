@@ -6,9 +6,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -45,6 +48,7 @@ public class ListaTweetsFragment extends Fragment {
             }
         });
 
+        registerForContextMenu(lista);
 
         return view;
 
@@ -65,4 +69,42 @@ public class ListaTweetsFragment extends Fragment {
     }
 
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        if (v == lista) {
+
+            final Tweet tweet = recuperaTweet(menuInfo);
+
+            MenuItem deletar = menu.add("Deletar");
+            MenuItem compartilhar = menu.add("Compartilhar");
+
+
+            deletar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
+
+                    TweetDao tweetDao = TwittelumApplication.getInstance().getTweetDao();
+                    tweetDao.deleta(tweet);
+
+                    carregaTweets();
+
+                    return true;
+                }
+            });
+
+
+        }
+
+    }
+
+    private Tweet recuperaTweet(ContextMenu.ContextMenuInfo menuInfo) {
+
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+
+        int position = info.position;
+
+        return (Tweet) lista.getItemAtPosition(position);
+    }
 }
